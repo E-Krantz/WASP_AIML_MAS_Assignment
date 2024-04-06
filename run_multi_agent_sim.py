@@ -17,16 +17,16 @@ def main():
     agent_radius = 5
 
     # Create team A
-    num_A_agents = 5
+    num_A_agents = 2
     step_length = 1     # np.ones((num_A_agents,))
-    sensing_radius = 100  # 100*np.ones((num_A_agents,))
+    sensing_radius = 0  # 100*np.ones((num_A_agents,))
     create_agents(world, agents,
                   'A', num_A_agents, step_length, agent_radius, sensing_radius)
 
     # Create team B
-    num_B_agents = 5
+    num_B_agents = 1
     step_length = 1
-    sensing_radius = 100
+    sensing_radius = 0
     create_agents(world, agents,
                   'B', num_B_agents, step_length, agent_radius, sensing_radius)
     
@@ -41,8 +41,9 @@ def main():
     # Run simulation #
     ##################
     steps = 1000
+    scenario = "a" # "b"
 
-    sim = Simulator(world,agents)
+    sim = Simulator(world,agents,scenario)
     sim.simulate(steps=steps)
     plot_movements(sim, anim_length=10, anim_fps=24)
 

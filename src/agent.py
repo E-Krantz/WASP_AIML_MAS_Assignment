@@ -14,8 +14,8 @@ class Agent:
         self.world_size = world_size
         self.avoidance_direction = 1 if agent_type == 'A' else -1 #np.sign(np.random.rand() - 0.5)
 
-    def move(self, other_agents):
-        self.update_target_position(other_agents)
+    def move(self, other_agents, scenario):
+        self.update_target_position(other_agents, scenario)
         
         """ Move towards a target position if it's not the current position.
         If new position will cause a collision, rotate direction vector (move around)."""
@@ -33,18 +33,19 @@ class Agent:
                     break
                 step_length = self.step_length
 
-    def update_target_position(self, other_agents):
+    def update_target_position(self, other_agents, scenario):
         # Find a target position for the agent by locating the nearest opposite type agent.
         A_list = []
         B_list = []
         target_position = self.target_position
         """Find all agents of type A and B.
-        Here we can include a perception radius too."""
+        We have included a perception radius too."""
         for other in other_agents:
-            if other.agent_type == 'A':
-                A_list.append(other)
-            elif other.agent_type == 'B':
-                B_list.append(other)
+            if self.sensing_radius == 0 or np.linalg.norm(self.position - other.position) < self.sensing_radius:
+                if other.agent_type == 'A':
+                    A_list.append(other)
+                elif other.agent_type == 'B':
+                    B_list.append(other)
         
         if (A_list == [] or B_list == []) and np.linalg.norm(self.target_position - self.position) < self.step_length:
             target_position = np.random.rand(2) * self.world_size           
@@ -56,30 +57,49 @@ class Agent:
             dist_to_target = float('inf')
             for agent_A in A_list:
                 for agent_B in B_list:
-                    # closest_point = (A.position + B.position)/2 # <- Simplest solution
-                    A = agent_A.position
-                    B = agent_B.position
-                    C = self.position
-                    AB = B - A
-                    if np.linalg.norm(AB) > 4*self.radius:
-                        AC = C - A
-                        BC = C - B
-                        proj_scalar = np.dot(AC, AB) / np.dot(AB, AB)
-                        D = A + proj_scalar * AB
 
-                        # Check if the projection scalar is between 0 and 1
-                        if 0 <= proj_scalar <= 1:
-                            closest_point = D
-                        else:
-                            # Determine if A or B is closer to C
-                            if np.linalg.norm(AC) < np.linalg.norm(BC):
-                                closest_point = A + 2*self.radius * AB/np.linalg.norm(AB)
+                    if scenario == 'a':
+                        # closest_point = (A.position + B.position)/2 # <- Simplest solution
+                        A = agent_A.position
+                        B = agent_B.position
+                        C = self.position
+                        AB = B - A
+                        if np.linalg.norm(AB) > 4*self.radius:
+                            AC = C - A
+                            BC = C - B
+                            proj_scalar = np.dot(AC, AB) / np.dot(AB, AB)
+                            D = A + proj_scalar * AB
+
+                            # Check if the projection scalar is between 0 and 1
+                            if 0 <= proj_scalar <= 1:
+                                closest_point = D
                             else:
-                                closest_point = B + 2*self.radius * -AB/np.linalg.norm(AB)
-                        
-                        if not self.will_collide(closest_point, other_agents) and np.linalg.norm(closest_point - self.position) < dist_to_target:
-                            dist_to_target = np.linalg.norm(closest_point - self.position)
-                            target_position = closest_point
+                                # Determine if A or B is closer to C
+                                if np.linalg.norm(AC) < np.linalg.norm(BC):
+                                    closest_point = A + 2*self.radius * AB/np.linalg.norm(AB)
+                                else:
+                                    closest_point = B + 2*self.radius * -AB/np.linalg.norm(AB)
+                            
+                            if not self.will_collide(closest_point, other_agents) and \
+                                np.linalg.norm(closest_point - self.position) < dist_to_target:
+                                dist_to_target = np.linalg.norm(closest_point - self.position)
+                                target_position = closest_point
+
+                    elif scenario == 'b':
+                        A = agent_A.position
+                        B = agent_B.position
+                        C = self.position
+                        AB = B - A
+                        offset = 2*self.radius # some extra offset to ensure we are not too close to A or B
+                        if self.agent_type == 'A':
+                            # ensure that B is inbetween self and A
+                            # so take the vector AB, be sure that target_position is on this line, but extend it slightly to 
+                            # ensure we are further than B is on this line
+                            target_position = B + (2*self.radius+offset) * AB/np.linalg.norm(AB)             
+                        elif self.agent_type == 'B':
+                            # ensure that A is inbetween self and B
+                            target_position = A + (2*self.radius+offset) * -AB/np.linalg.norm(AB)
+
         # Update the target position
         self.target_position = target_position
 

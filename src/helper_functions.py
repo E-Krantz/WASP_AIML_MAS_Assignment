@@ -14,6 +14,7 @@ def create_agents(world,agents,
         step_length = step_length * np.ones((num_agents,))
     assert len(step_length) == num_agents, "step_length must be a single value or a numpy array of length num_agents"
 
+    # then add an agent on a position that is not yet occupied
     for i in range(num_agents):
             position_valid = False
             while not position_valid:
