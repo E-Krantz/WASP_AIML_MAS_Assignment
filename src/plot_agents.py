@@ -15,14 +15,13 @@ def animate_agents(i, agent_circles, positions):
 
 def plot_movements(sim, anim_length=10, anim_fps=12):
     """Animate the movements of all agents, including their sensing radius."""
-    plot_sensing_radius = True
 
     skip_frames = max(int(len(sim.history)/(anim_length * anim_fps)), 1)
     positions = np.array(sim.history[::skip_frames])  # Assuming sim.history is a list of positions for each step
     
     fig, ax = plt.subplots()
-    ax.set_xlim(0, sim.world_size)
-    ax.set_ylim(0, sim.world_size)
+    ax.set_xlim(0, sim.world.world_size)
+    ax.set_ylim(0, sim.world.world_size)
 
     colors = ['red' if agent.agent_type == 'A' else 'blue' if agent.agent_type == 'B' else 'green' for agent in sim.agents]
     agent_circles = []  # This will store tuples of (position_circle, sensing_circle) for each agent
@@ -31,11 +30,9 @@ def plot_movements(sim, anim_length=10, anim_fps=12):
         position_circle = Circle(pos, radius=agent.radius, color=color)
         ax.add_patch(position_circle)
         
-        if plot_sensing_radius:
-            sensing_circle = Circle(pos, radius=agent.sensing_radius, color=color, fill=False, linestyle='--')
-            ax.add_patch(sensing_circle)
-        else:
-            sensing_circle = None
+        # We can always add the sensing circle because radius=0 if we don't care about it (and you don't see it)
+        sensing_circle = Circle(pos, radius=agent.sensing_radius, color=color, fill=False, linestyle='--')
+        ax.add_patch(sensing_circle)
         
         agent_circles.append((position_circle, sensing_circle))
     
