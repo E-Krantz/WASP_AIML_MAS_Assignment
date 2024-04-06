@@ -2,12 +2,13 @@ import numpy as np
 
 class Agent:
     collision = False
-    def __init__(self, agent_type, position, step_length=1, radius=100, world_size=1000):
+    def __init__(self, agent_type, position, step_length=1, radius=100, sensing_radius=200, world_size=1000):
         self.agent_type = agent_type
         self.position = np.array(position)
         self.target_position = np.random.rand(2) * world_size
         self.step_length = step_length
         self.radius = radius
+        self.sensing_radius = sensing_radius
         self.world_size = world_size
         self.avoidance_direction = 1 if agent_type == 'A' else -1 #np.sign(np.random.rand() - 0.5)
 

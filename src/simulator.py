@@ -2,7 +2,8 @@ import numpy as np
 from .agent import Agent
 
 class Simulator:
-    def __init__(self, world_size, num_A_agents, num_B_agents, num_T_agents, step_length=1, agent_radius=100):
+    def __init__(self, world_size, num_A_agents, num_B_agents, num_T_agents, 
+                 step_length=1, agent_radius=100, sensing_radius=200):
         self.world_size = world_size
         self.agent_radius = agent_radius
         self.step_length = step_length
@@ -15,7 +16,7 @@ class Simulator:
                 position = np.random.rand(2) * (world_size - 2*agent_radius) + agent_radius
                 if not self.check_overlap(position):
                     position_valid = True
-                    self.agents.append(Agent('A', position, step_length=self.step_length, radius=agent_radius, world_size=world_size))
+                    self.agents.append(Agent('A', position, step_length=self.step_length, radius=agent_radius, sensing_radius=sensing_radius, world_size=world_size))
         
         for _ in range(num_B_agents):
             position_valid = False
@@ -23,7 +24,7 @@ class Simulator:
                 position = np.random.rand(2) * (world_size - 2*agent_radius) + agent_radius
                 if not self.check_overlap(position):
                     position_valid = True
-                    self.agents.append(Agent('B', position, step_length=self.step_length, radius=agent_radius, world_size=world_size))
+                    self.agents.append(Agent('B', position, step_length=self.step_length, radius=agent_radius, sensing_radius=sensing_radius, world_size=world_size))
 
         for _ in range(num_T_agents):
             position_valid = False
@@ -31,12 +32,13 @@ class Simulator:
                 position = np.random.rand(2) * (world_size - 2*agent_radius) + agent_radius
                 if not self.check_overlap(position):
                     position_valid = True
-                    self.agents.append(Agent('T', position, step_length=self.step_length, radius=agent_radius, world_size=world_size))
+                    self.agents.append(Agent('T', position, step_length=self.step_length, radius=agent_radius, sensing_radius=sensing_radius, world_size=world_size))
     
     def update(self):
         # Update positions of all agents for one simulation step.
         for agent in self.agents:
             other_agents = [other for other in self.agents if other != agent]
+            sensed_other_agents = [other for other in other_agents if np.linalg.norm(other.position - agent.position) < agent.sensing_radius]
             # agent.update_target_position(other_agents)
             agent.move(other_agents)
         
