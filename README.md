@@ -1,7 +1,7 @@
 coding
 1. perception radius (DONE)
 2. different speeds (per player, per team) (DONE)
-3. situation b)
+3. situation b) (DONE)
 4. more teams
 5. saving results
 
