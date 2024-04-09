@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
-from matplotlib.patches import Circle
+from matplotlib.patches import Circle, Patch
 
 def animate_agents(i, agent_circles, positions):
     """Update the position of each agent's circles (both position and sensing radius)."""
@@ -39,5 +39,11 @@ def plot_movements(sim, anim_length=10, anim_fps=12):
     anim = FuncAnimation(fig, animate_agents, frames=len(positions), interval=1e3/anim_fps, fargs=(agent_circles, positions), blit=True)
     
     ax.set_aspect('equal')
+
+    # Create legend
+    red_patch = Patch(color='red', label='A')
+    blue_patch = Patch(color='blue', label='B')
+    ax.legend(handles=[red_patch, blue_patch])
+
     plt.show()
     return anim
