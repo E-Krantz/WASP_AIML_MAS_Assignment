@@ -83,7 +83,7 @@ if __name__ == "__main__":
     ###########################
     sims = []
     # create tqdm
-    N = 50
+    N = 100
     pbar = tqdm(total=N)
     for i in range(N):
         sims.append(main(world))
@@ -131,6 +131,8 @@ if __name__ == "__main__":
     #####################
     # Rotated Histogram #
     #####################
+    # here we get the mean density of both teams, and rotate the mean position of team A to the x-axis
+    # as the agents always converge to a line, we can plot this then on a 1D histogram
     mean_pos_teams = []
     for sim in sims:
         # compute the mean position of each team
@@ -154,40 +156,58 @@ if __name__ == "__main__":
     ####################
     # Seperation index #
     ####################
-    separation_index = []
-    for sim in sims:
-        separation_index.append(get_separation_index(sim.history[-1]))
-
-    separation_index = np.array(separation_index)
-    mean_separation_index = np.mean(separation_index, axis=0)
-    std_separation_index = np.std(separation_index, axis=0)
-
-    print(f"Mean separation index:               {mean_separation_index}")
-    print(f"Standard deviation separation index: {std_separation_index}")
-
-    # Get the separation of a sim over time
-    separation_index = []
+    # here we plot the separation index of each simulation
+    # orderliness = avg_inter_team_distance / (avg_intra_team_distance_A + avg_intra_team_distance_B)/2
+    # Get the separation of all sims over time
+    orderlinesses = []
+    intra_team_distances = []
     for sim in sims:
         indices = []
+        distances = []
         # we do this for each sim, loop through the history and get the separation index
         for sim_state in sim.history:
-            indices.append(get_separation_index(sim_state))
-        separation_index.append(indices)
+            orderliness, total_intra_team_distance = get_separation_index(sim_state)
+            indices.append(orderliness)
+            distances.append(total_intra_team_distance)
+        orderlinesses.append(indices)
+        intra_team_distances.append(distances)
     
-    # Now plot the separation over time
+    # Now plot the orderliness over time
     fig, axs = plt.subplots(1,1, figsize=(12,6))
-    for sim in separation_index:
+    for sim in orderlinesses:
         axs.plot(sim)
     axs.set_xlabel("Time")
-    axs.set_ylabel("Separation index")
-    plt.savefig("figures/separation_index.png", dpi=300)
+    axs.set_ylabel("Orderliness index")
+    plt.savefig("figures/orderliness_index.png", dpi=300)
+
+    # Now plot the intra team distances over time
+    fig, axs = plt.subplots(1,1, figsize=(12,6))
+    for sim in intra_team_distances:
+        axs.plot(sim)
+    axs.set_xlabel("Time")
+    axs.set_ylabel("Intra team distances")
+    plt.savefig("figures/intra_team_distances_index.png", dpi=300)
 
     # Create a plot with the mean and standard deviation over time for all the different simulations
-    mean_separation_index = np.mean(separation_index, axis=0)
-    std_separation_index = np.std(separation_index, axis=0)
-    fig, axs = plt.subplots(1,1, figsize=(12,6))
-    axs.plot(mean_separation_index)
-    axs.fill_between(range(len(mean_separation_index)), mean_separation_index-std_separation_index, mean_separation_index+std_separation_index, alpha=0.5)
-    axs.set_xlabel("Time")
-    axs.set_ylabel("Separation index")
-    plt.savefig("figures/separation_index_mean_std.png", dpi=300)
+    mean_orderlinesses_index = np.mean(orderlinesses, axis=0)
+    std_orderlinesses_index = np.std(orderlinesses, axis=0)
+
+    mean_intra_team_distances_index = np.mean(intra_team_distances, axis=0)
+    std_intra_team_distances_index = np.std(intra_team_distances, axis=0)
+
+    fig, axs = plt.subplots(1,2, figsize=(12,6))
+    axs[0].plot(mean_orderlinesses_index)
+    axs[0].fill_between(range(len(mean_orderlinesses_index)), 
+                     mean_orderlinesses_index-std_orderlinesses_index, 
+                     mean_orderlinesses_index+std_orderlinesses_index, alpha=0.5)
+    axs[0].set_xlabel("Time")
+    axs[0].set_ylabel("Separation index")
+
+    axs[1].plot(mean_intra_team_distances_index)
+    axs[1].fill_between(range(len(mean_intra_team_distances_index)), 
+                     mean_intra_team_distances_index-std_intra_team_distances_index, 
+                     mean_intra_team_distances_index+std_intra_team_distances_index, alpha=0.5)
+    axs[1].set_xlabel("Time")
+    axs[1].set_ylabel("Intra team distances")
+
+    plt.savefig("figures/indices_mean_std.png", dpi=300)

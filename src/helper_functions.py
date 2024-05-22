@@ -101,7 +101,8 @@ def get_separation_index(sim_instance):
     avg_intra_team_B_distance = np.mean(intra_B[np.triu_indices(len(positions_B), k=1)])
 
     orderliness = avg_inter_team_distance / ((avg_intra_team_A_distance + avg_intra_team_B_distance) / 2)
-    return orderliness
+    total_intra_team_distance = avg_intra_team_A_distance + avg_intra_team_B_distance
+    return orderliness, total_intra_team_distance
 
 def circle_around_index(x,y, r, density):
     # input is x and y which is an index in an array
