@@ -6,7 +6,7 @@ coding
 5. saving results
 
 report
-1. metric for convergence (entropy)
+1. metric for convergence (entropy, relative density)
 2. write report
 
 
