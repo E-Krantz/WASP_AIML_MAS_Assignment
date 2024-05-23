@@ -15,14 +15,14 @@ def main(world, plot=False):
     agent_radius = 10
 
     # Create team A
-    num_A_agents = 4
+    num_A_agents = 6
     step_length = 1      # np.ones((num_A_agents,))
     sensing_radius = 200 # 100*np.ones((num_A_agents,))
     create_agents(world, agents,
                   'A', num_A_agents, step_length, agent_radius, sensing_radius)
 
     # Create team B
-    num_B_agents = 4
+    num_B_agents = 6
     step_length = 1
     sensing_radius = 200
     create_agents(world, agents,

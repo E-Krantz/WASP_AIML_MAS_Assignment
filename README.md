@@ -6,8 +6,16 @@ coding
 5. saving results
 
 report
-1. metric for convergence (entropy, relative density)
-2. write report
+1. metric for convergence (entropy, relative density) (DONE)
+2. Add and plot a metric that uses the desired vector of agents in team A and B
+3. write report
+
+# Comparisons:
+1. perception radius, heterogeneity of speed, relative player percentages
+2. perception radius [100, 250, inf]
+3. heterogeneity of speed [equal, team A x2, half of A and B x2]
+4. player percentages [50-50, 75-25, 90-10]
+keep teams of 6
 
 
 # Problem Description:
