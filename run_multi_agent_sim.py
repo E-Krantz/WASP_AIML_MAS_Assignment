@@ -94,7 +94,7 @@ if __name__ == "__main__":
     ############
     # Plotting #
     ############
-    plot_density(sims)
-    plot_rotated_histogram(sims)
-    plot_separation_index(sims)
-    plot_target_distance(sims)
+    plot_density(sims, name="density")
+    plot_rotated_histogram(sims, name="histogram")
+    plot_separation_index(sims, name="orderliness")
+    plot_target_distance(sims, name="target_distance")

@@ -8,7 +8,7 @@ from src.plot_agents import plot_movements
 from src.helper_functions import create_agents, pos_to_grid, get_density, \
     get_separation_index, circle_around_index, get_mean_target_distance
    
-def plot_density(sims):
+def plot_density(sims, name="density"):
     ###############
     # Density Fig #
     ###############
@@ -47,9 +47,10 @@ def plot_density(sims):
     ax.set_yticks(np.arange(grid_world.y_lim[0], grid_world.y_lim[1]+0.1, 20))
     ax.set_xlabel("x [m]")
     ax.set_ylabel("y [m]")
-    plt.savefig("figures/density.png", dpi=300)
+    
+    plt.savefig(f"figures/{name}.png", dpi=300)
 
-def plot_rotated_histogram(sims):
+def plot_rotated_histogram(sims, name="histogram"):
     #####################
     # Rotated Histogram #
     #####################
@@ -73,9 +74,9 @@ def plot_rotated_histogram(sims):
     axs.set_xlabel("Mean x position [m]")
     axs.set_ylabel("Frequency [-]")
     axs.legend()
-    plt.savefig("figures/histogram.png", dpi=300)
+    plt.savefig(f"figures/{name}.png", dpi=300)
 
-def plot_separation_index(sims):
+def plot_separation_index(sims, name="orderliness"):
     ####################
     # Seperation index #
     ####################
@@ -133,9 +134,10 @@ def plot_separation_index(sims):
     axs[1].set_xlabel("Time [it]")
     axs[1].set_ylabel("Intra team distances [m]")
 
-    plt.savefig("figures/indices_mean_std.png", dpi=300)
+    plt.savefig(f"figures/{name}.png", dpi=300)
 
-def plot_target_distance(sims):
+
+def plot_target_distance(sims, name="target_distance"):
     #####################
     # Target distance #
     #####################
@@ -175,4 +177,4 @@ def plot_target_distance(sims):
     axs.set_xlabel("Time [it]")
     axs.set_ylabel("Mean target distance [m]")
 
-    plt.savefig("figures/target_distance_mean_std.png", dpi=300)
+    plt.savefig(f"figures/{name}.png", dpi=300)
