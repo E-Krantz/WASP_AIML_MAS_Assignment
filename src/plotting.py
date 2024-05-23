@@ -37,7 +37,7 @@ def plot_density(sims, name="density"):
             density[x,y] -= 1
 
     # Plot the heatmap
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(1,1, figsize=(6,6))
     ax.imshow(density.T, cmap='coolwarm', interpolation='hermite',
               extent=[grid_world.x_lim[0], grid_world.x_lim[1], grid_world.y_lim[0], grid_world.y_lim[1]])
     # change the x and y ticks to match grid_world
@@ -119,20 +119,20 @@ def plot_separation_index(sims, name="orderliness"):
     mean_intra_team_distances_index = np.mean(intra_team_distances, axis=0)
     std_intra_team_distances_index = np.std(intra_team_distances, axis=0)
 
-    fig, axs = plt.subplots(1,2, figsize=(12,6))
-    axs[0].plot(mean_orderlinesses_index)
-    axs[0].fill_between(range(len(mean_orderlinesses_index)), 
-                     mean_orderlinesses_index-std_orderlinesses_index, 
-                     mean_orderlinesses_index+std_orderlinesses_index, alpha=0.5)
-    axs[0].set_xlabel("Time [it]")
-    axs[0].set_ylabel("Separation index [m]")
+    fig, axs = plt.subplots(1,1, figsize=(12,6))
+    # axs[0].plot(mean_orderlinesses_index)
+    # axs[0].fill_between(range(len(mean_orderlinesses_index)), 
+    #                  mean_orderlinesses_index-std_orderlinesses_index, 
+    #                  mean_orderlinesses_index+std_orderlinesses_index, alpha=0.5)
+    # axs[0].set_xlabel("Time [it]")
+    # axs[0].set_ylabel("Separation index [m]")
 
-    axs[1].plot(mean_intra_team_distances_index)
-    axs[1].fill_between(range(len(mean_intra_team_distances_index)), 
+    axs[0].plot(mean_intra_team_distances_index)
+    axs[0].fill_between(range(len(mean_intra_team_distances_index)), 
                      mean_intra_team_distances_index-std_intra_team_distances_index, 
                      mean_intra_team_distances_index+std_intra_team_distances_index, alpha=0.5)
-    axs[1].set_xlabel("Time [it]")
-    axs[1].set_ylabel("Intra team distances [m]")
+    axs[0].set_xlabel("Time [it]")
+    axs[0].set_ylabel("Intra team distances [m]")
 
     plt.savefig(f"figures/{name}.png", dpi=300)
 
