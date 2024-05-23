@@ -8,6 +8,8 @@ class Agent:
         self.agent_type = agent_type
         self.position = np.array(position)
         self.target_position = np.random.rand(2) * world_size
+        self.target_distance = np.linalg.norm(self.target_position - self.position)
+
         self.step_length = step_length
         self.radius = radius
         self.sensing_radius = sensing_radius
@@ -134,6 +136,8 @@ class Agent:
 
         # Update the target position
         self.target_position = target_position
+        # Update the target distance
+        self.target_distance = np.linalg.norm(self.target_position - self.position)
 
     def will_collide(self, new_position, other_agents):
         if new_position[0] < self.radius or new_position[0] > self.world_size-self.radius or new_position[1] < self.radius or new_position[1] > self.world_size-self.radius:

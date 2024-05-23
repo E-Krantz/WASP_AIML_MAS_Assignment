@@ -82,6 +82,15 @@ def get_density(sim, rotate=False, plot=False):
 
     return [mean_pos_A, mean_pos_B]
 
+def get_mean_target_distance(sim_instance):
+    agents_A = [agent for agent in sim_instance if agent.agent_type == 'A']
+    agents_B = [agent for agent in sim_instance if agent.agent_type == 'B']
+
+    mean_target_distance_A = np.mean([agent.target_distance for agent in agents_A])
+    mean_target_distance_B = np.mean([agent.target_distance for agent in agents_B])
+
+    return mean_target_distance_A, mean_target_distance_B
+
 def get_separation_index(sim_instance):
     agents_A = [agent for agent in sim_instance if agent.agent_type == 'A']
     agents_B = [agent for agent in sim_instance if agent.agent_type == 'B']
