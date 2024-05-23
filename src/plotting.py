@@ -7,8 +7,11 @@ from src.world import World
 from src.plot_agents import plot_movements
 from src.helper_functions import create_agents, pos_to_grid, get_density, \
     get_separation_index, circle_around_index, get_mean_target_distance
+
+# increase the text size of the plots
+plt.rcParams.update({'font.size': 14})
    
-def plot_density(sims, name="density"):
+def plot_density(sims, title="density", name="density"):
     ###############
     # Density Fig #
     ###############
@@ -37,7 +40,7 @@ def plot_density(sims, name="density"):
             density[x,y] -= 1
 
     # Plot the heatmap
-    fig, ax = plt.subplots(1,1, figsize=(6,6))
+    fig, ax = plt.subplots(1,1, figsize=(7,6))
     ax.imshow(density.T, cmap='coolwarm', interpolation='hermite',
               extent=[grid_world.x_lim[0], grid_world.x_lim[1], grid_world.y_lim[0], grid_world.y_lim[1]])
     # change the x and y ticks to match grid_world
@@ -47,10 +50,15 @@ def plot_density(sims, name="density"):
     ax.set_yticks(np.arange(grid_world.y_lim[0], grid_world.y_lim[1]+0.1, 20))
     ax.set_xlabel("x [m]")
     ax.set_ylabel("y [m]")
+    ax.set_title(title)
+    # add legend by plotting two very tiny dots in the center
+    ax.plot(0,0, '--', color='orange', label='Team A')
+    ax.plot(0,0, '--', color='blue', label='Team B')
+    ax.legend()
     
     plt.savefig(f"figures/{name}.png", dpi=300)
 
-def plot_rotated_histogram(sims, name="histogram"):
+def plot_rotated_histogram(sims, title="histogram", name="histogram"):
     #####################
     # Rotated Histogram #
     #####################
@@ -73,10 +81,11 @@ def plot_rotated_histogram(sims, name="histogram"):
     axs.hist(mean_x_pos_B, bins=20, alpha=0.5, color='red', label='Team B')
     axs.set_xlabel("Mean x position [m]")
     axs.set_ylabel("Frequency [-]")
+    axs.set_title(title)
     axs.legend()
     plt.savefig(f"figures/{name}.png", dpi=300)
 
-def plot_separation_index(sims, name="orderliness"):
+def plot_separation_index(sims, title="orderliness", name="orderliness"):
     ####################
     # Seperation index #
     ####################
@@ -127,17 +136,18 @@ def plot_separation_index(sims, name="orderliness"):
     # axs[0].set_xlabel("Time [it]")
     # axs[0].set_ylabel("Separation index [m]")
 
-    axs[0].plot(mean_intra_team_distances_index)
-    axs[0].fill_between(range(len(mean_intra_team_distances_index)), 
+    axs.plot(mean_intra_team_distances_index, linewidth=3)
+    axs.fill_between(range(len(mean_intra_team_distances_index)), 
                      mean_intra_team_distances_index-std_intra_team_distances_index, 
                      mean_intra_team_distances_index+std_intra_team_distances_index, alpha=0.5)
-    axs[0].set_xlabel("Time [it]")
-    axs[0].set_ylabel("Intra team distances [m]")
+    axs.set_xlabel("Time [it]")
+    axs.set_ylabel("Intra team distances [m]")
+    axs.set_title(title)
 
     plt.savefig(f"figures/{name}.png", dpi=300)
 
 
-def plot_target_distance(sims, name="target_distance"):
+def plot_target_distance(sims, title="target_distance", name="target_distance"):
     #####################
     # Target distance #
     #####################
@@ -164,17 +174,19 @@ def plot_target_distance(sims, name="target_distance"):
     std_target_distances_B = np.std(mean_target_distances_B, axis=0)
 
     fig, axs = plt.subplots(1,1, figsize=(12,6))
-    axs.plot(mean_target_distances_A)
+    axs.plot(mean_target_distances_A, label='Team A', linewidth=3)
     axs.fill_between(range(len(mean_target_distances_A)), 
                      mean_target_distances_A-std_target_distances_A, 
                      mean_target_distances_A+std_target_distances_A, alpha=0.5)
     
-    axs.plot(mean_target_distances_B)
+    axs.plot(mean_target_distances_B, label='Team B', linewidth=3)
     axs.fill_between(range(len(mean_target_distances_B)), 
                      mean_target_distances_B-std_target_distances_B, 
                      mean_target_distances_B+std_target_distances_B, alpha=0.5)
     
     axs.set_xlabel("Time [it]")
     axs.set_ylabel("Mean target distance [m]")
+    axs.set_title(title) 
+    axs.legend()
 
     plt.savefig(f"figures/{name}.png", dpi=300)
