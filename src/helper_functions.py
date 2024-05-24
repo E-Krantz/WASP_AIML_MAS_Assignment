@@ -102,7 +102,7 @@ def get_separation_index(sim_instance):
     # Compute the distance between all agents
     pairwise_distances = squareform(pdist(positions))
     intra_A = pairwise_distances[:len(positions_A), :len(positions_A)]
-    intra_B = pairwise_distances[len(positions_B):, len(positions_B):]
+    intra_B = pairwise_distances[len(positions_A):, len(positions_A):]
 
     avg_inter_team_distance = np.mean(pairwise_distances)
     # only take the average over the upper triangle of the intra_A matrix

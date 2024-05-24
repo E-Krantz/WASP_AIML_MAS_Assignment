@@ -81,6 +81,7 @@ def plot_rotated_histogram(sims, title="histogram", name="histogram"):
     axs.hist(mean_x_pos_B, bins=20, alpha=0.5, color='red', label='Team B')
     axs.set_xlabel("Mean x position [m]")
     axs.set_ylabel("Frequency [-]")
+    axs.set_xlim([-350,350])
     axs.set_title(title)
     axs.legend()
     plt.savefig(f"figures/{name}.png", dpi=300)
@@ -142,6 +143,7 @@ def plot_separation_index(sims, title="orderliness", name="orderliness"):
                      mean_intra_team_distances_index+std_intra_team_distances_index, alpha=0.5)
     axs.set_xlabel("Time [it]")
     axs.set_ylabel("Intra team distances [m]")
+    axs.set_ylim([0,1200])
     axs.set_title(title)
 
     plt.savefig(f"figures/{name}.png", dpi=300)
@@ -186,6 +188,7 @@ def plot_target_distance(sims, title="target_distance", name="target_distance"):
     
     axs.set_xlabel("Time [it]")
     axs.set_ylabel("Mean target distance [m]")
+    axs.set_ylim([0,600])
     axs.set_title(title) 
     axs.legend()
 

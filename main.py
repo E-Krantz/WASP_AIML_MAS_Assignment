@@ -18,6 +18,9 @@ def plot_sims(sim_results,
     # Create part of the save string
     save_str = f"_{scenario}_numA{num_A_agents}_numB{num_B_agents}_stepA{step_length_A}_stepB{step_length_B}_senseA{sensing_radius_A}_senseB{sensing_radius_B}"
     title = f" $N_A: {num_A_agents}, N_A: {num_B_agents}, L_A: {step_length_A}, L_B: {step_length_B}, r_A: {sensing_radius_A}, r_B: {sensing_radius_B}$"
+    # print("save_string:", save_str)
+    # print("title: ", title)
+
     plot_density(sim_results, title=f"Density with {title}", name=f"density{save_str}")
     plot_rotated_histogram(sim_results, title=f"Histogram with {title}", name=f"histogram{save_str}")
     plot_separation_index(sim_results, title=f"Orderliness with {title}", name=f"orderliness{save_str}")
@@ -70,7 +73,7 @@ if __name__ == "__main__":
     world_limits = [0,1000]
     world = World(world_limits)
 
-    num_sims = 1
+    num_sims = 50
 
     scenarios = []
     scenarios.append((world, num_sims, "a", 6, 6, 1, 1, 200, 200))
@@ -87,14 +90,13 @@ if __name__ == "__main__":
 
     ############
     # Run sims #
-    ############    
+    ############ 
     pbar = tqdm(total=len(scenarios))
     with concurrent.futures.ProcessPoolExecutor() as executor:
         results = [executor.submit(run_sims, *scenarios[i]) for i in range(len(scenarios))]
 
         for future in concurrent.futures.as_completed(results):
             pbar.update(1)
-    
     pbar.close()
 
     print("All simulations completed!")
