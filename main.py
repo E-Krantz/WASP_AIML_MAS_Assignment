@@ -21,10 +21,10 @@ def plot_sims(sim_results,
     # print("save_string:", save_str)
     # print("title: ", title)
 
-    plot_density(sim_results, title=f"Density with {title}", name=f"density{save_str}")
-    plot_rotated_histogram(sim_results, title=f"Histogram with {title}", name=f"histogram{save_str}")
+    # plot_density(sim_results, title=f"Density with {title}", name=f"density{save_str}")
+    # plot_rotated_histogram(sim_results, title=f"Histogram with {title}", name=f"histogram{save_str}")
     plot_separation_index(sim_results, title=f"Orderliness with {title}", name=f"orderliness{save_str}")
-    plot_target_distance(sim_results, title=f"Target distance with {title}", name=f"target_distance{save_str}")
+    # plot_target_distance(sim_results, title=f"Target distance with {title}", name=f"target_distance{save_str}")
 
 
 def run_sims(world,
